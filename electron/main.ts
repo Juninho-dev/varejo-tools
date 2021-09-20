@@ -103,7 +103,7 @@ async function createMenu() {
         {
           label: 'Learn More',
           click: () => {
-            shell.openExternal('https://github.com/diego3g/rocketredis/')
+            shell.openExternal('https://github.com/Juninho-dev/varejo-tools/')
           }
         }
       ]

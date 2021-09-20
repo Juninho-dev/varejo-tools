@@ -11,6 +11,7 @@ export const Container = styled.button<ContainerProps>`
   border: 0;
   border-radius: 4px;
   color: #fff;
+  padding: 10px;
 
   display: flex;
   align-items: center;

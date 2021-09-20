@@ -14,6 +14,10 @@ const schema = {
       minHeight: 600,
       height: 700
     }
+  },
+  token: {
+    type: JSONSchemaType.String,
+    default: 'null'
   }
 }
 

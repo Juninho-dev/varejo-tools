@@ -5,6 +5,7 @@ import { remote } from 'electron'
 import os from 'os'
 
 import { useConfig } from '../../hooks/useConfig'
+import { config } from '../../store/config'
 import {
   Container,
   WindowActions,
@@ -57,7 +58,7 @@ const Header: React.FC = () => {
 
   return (
     <Container>
-      <strong>Rocket Redis</strong>
+      <strong>Varejo Tools</strong>
 
       {shouldUseMacOSWindowActions ? (
         <WindowActions position="left" shouldShowIconsOnHover>
