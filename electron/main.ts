@@ -15,8 +15,11 @@ import {
   getWindowBounds,
   setWindowBounds
 } from '../src/utils/windowBoundsController'
+import TrayGenerator from './TrayGenerator'
 
 let mainWindow: Electron.BrowserWindow | null
+
+let tray = null
 
 function createWindow() {
   const icon = nativeImage.createFromPath(`${app.getAppPath()}/build/icon.png`)
@@ -50,13 +53,20 @@ function createWindow() {
     )
   }
 
-  mainWindow.on('close', () => {
+  mainWindow.on('close', event => {
     setWindowBounds(mainWindow?.getBounds())
+    event.preventDefault()
+    mainWindow?.hide()
   })
 
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+}
+
+const createTray = () => {
+  tray = new TrayGenerator(mainWindow)
+  tray.createTray()
 }
 
 async function createMenu() {
@@ -78,8 +88,11 @@ async function createMenu() {
         },
         {
           label: i18n.t('applicationMenu:exit'),
-          role: 'quit',
-          accelerator: 'CmdOrCtrl+Q'
+          accelerator: 'CmdOrCtrl+Q',
+          click: () => {
+            mainWindow?.destroy()
+            app.quit()
+          }
         }
       ]
     },
@@ -118,6 +131,22 @@ app.on('ready', () => {
   createWindow()
   autoUpdater.checkForUpdatesAndNotify()
   createMenu()
+  createTray()
+})
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit()
+  }
+})
+
+app.on('activate', () => {
+  if (BrowserWindow.getAllWindows().length) {
+    mainWindow?.setVisibleOnAllWorkspaces(true)
+    mainWindow?.show()
+    mainWindow?.setVisibleOnAllWorkspaces(false)
+    mainWindow?.focus()
+  }
 })
 
 app.allowRendererProcessReuse = true

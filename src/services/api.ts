@@ -1,6 +1,6 @@
 import axios from 'axios'
 
 export default axios.create({
-  baseURL: 'https://dom.tools/api',
+  baseURL: 'http://localhost:8000/api',
   timeout: 5000
 })

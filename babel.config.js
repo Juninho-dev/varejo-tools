@@ -14,6 +14,7 @@ module.exports = api => {
           regenerator: true
         }
       ],
+      ['@babel/plugin-proposal-class-properties'],
       !api.env('production') && 'react-refresh/babel'
     ].filter(Boolean)
   }
