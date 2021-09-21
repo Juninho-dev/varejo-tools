@@ -132,7 +132,7 @@
     "webpack-dev-server": "3.11.0"
   },
   "build": {
-    "appId": "com.Juninho-dev.varejo-tools",
+    "appId": "com.juninhodev.varejotools",
     "productName": "Varejo Tools",
     "files": [
       "dist/"
