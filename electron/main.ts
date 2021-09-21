@@ -8,7 +8,6 @@ import {
 } from 'electron'
 import { autoUpdater } from 'electron-updater'
 import * as path from 'path'
-import * as url from 'url'
 
 import i18n from '../i18n'
 import {
@@ -44,13 +43,7 @@ function createWindow() {
   if (process.env.NODE_ENV === 'development') {
     mainWindow.loadURL('http://localhost:4000')
   } else {
-    mainWindow.loadURL(
-      url.format({
-        pathname: path.join(__dirname, 'renderer/index.html'),
-        protocol: 'file:',
-        slashes: true
-      })
-    )
+    mainWindow.loadURL(`file://${path.join(__dirname, 'renderer/index.html')}`)
   }
 
   mainWindow.on('close', event => {
@@ -126,6 +119,34 @@ async function createMenu() {
   const menu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(menu)
 }
+
+function sendStatusToWindow(text: string) {
+  console.log(text)
+  mainWindow?.webContents.send('message', text)
+}
+
+autoUpdater.on('checking-for-update', () => {
+  sendStatusToWindow('Checking for update...')
+})
+autoUpdater.on('update-available', info => {
+  sendStatusToWindow('Update available.')
+})
+autoUpdater.on('update-not-available', info => {
+  sendStatusToWindow('Update not available.')
+})
+autoUpdater.on('error', err => {
+  sendStatusToWindow('Error in auto-updater. ' + err)
+})
+autoUpdater.on('download-progress', progressObj => {
+  let log_message = 'Download speed: ' + progressObj.bytesPerSecond
+  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%'
+  log_message =
+    log_message + ' (' + progressObj.transferred + '/' + progressObj.total + ')'
+  sendStatusToWindow(log_message)
+})
+autoUpdater.on('update-downloaded', info => {
+  sendStatusToWindow('Update downloaded')
+})
 
 app.on('ready', () => {
   createWindow()

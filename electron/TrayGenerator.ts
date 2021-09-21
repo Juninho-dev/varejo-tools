@@ -27,9 +27,10 @@ class TrayGenerator {
   }
 
   createTray = () => {
-    this.tray = new Tray(
-      nativeImage.createFromPath(`${app.getAppPath()}/build/icon_22.png`)
+    const trayIcon = nativeImage.createFromPath(
+      `${app.getAppPath()}/build/icon.png`
     )
+    this.tray = new Tray(trayIcon.resize({ width: 16, height: 16 }))
 
     this.tray.setIgnoreDoubleClickEvents(true)
     const mainWindow = this.mainWindow
