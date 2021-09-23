@@ -4,7 +4,9 @@ import {
   nativeImage,
   Menu,
   shell,
-  MenuItemConstructorOptions
+  MenuItemConstructorOptions,
+  dialog,
+  MenuItem
 } from 'electron'
 import { autoUpdater } from 'electron-updater'
 import * as path from 'path'
@@ -15,11 +17,12 @@ import {
   setWindowBounds
 } from '../src/utils/windowBoundsController'
 import TrayGenerator from './TrayGenerator'
+import checkForUpdates from './updater'
 
 let mainWindow: Electron.BrowserWindow | null
 
 let tray = null
-
+autoUpdater.autoInstallOnAppQuit = false
 function createWindow() {
   const icon = nativeImage.createFromPath(`${app.getAppPath()}/build/icon.png`)
 
@@ -36,6 +39,7 @@ function createWindow() {
     transparent: true,
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,
       enableRemoteModule: true
     }
   })
@@ -54,6 +58,7 @@ function createWindow() {
 
   mainWindow.on('closed', () => {
     mainWindow = null
+    app.quit()
   })
 }
 
@@ -85,6 +90,15 @@ async function createMenu() {
           click: () => {
             mainWindow?.destroy()
             app.quit()
+          }
+        },
+        {
+          type: 'separator'
+        },
+        {
+          label: 'Verificar se há atualizações',
+          click: (item: MenuItem) => {
+            checkForUpdates(item)
           }
         }
       ]
@@ -128,24 +142,14 @@ function sendStatusToWindow(text: string) {
 autoUpdater.on('checking-for-update', () => {
   sendStatusToWindow('Checking for update...')
 })
-autoUpdater.on('update-available', info => {
-  sendStatusToWindow('Update available.')
-})
-autoUpdater.on('update-not-available', info => {
-  sendStatusToWindow('Update not available.')
-})
-autoUpdater.on('error', err => {
-  sendStatusToWindow('Error in auto-updater. ' + err)
-})
-autoUpdater.on('download-progress', progressObj => {
-  let log_message = 'Download speed: ' + progressObj.bytesPerSecond
-  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%'
-  log_message =
-    log_message + ' (' + progressObj.transferred + '/' + progressObj.total + ')'
-  sendStatusToWindow(log_message)
-})
-autoUpdater.on('update-downloaded', info => {
-  sendStatusToWindow('Update downloaded')
+
+autoUpdater.on('update-downloaded', () => {
+  dialog.showMessageBox({
+    title: 'Instalar atualizações',
+    message:
+      'Atualizações baixadas, o aplicativo será encerrado para atualização ...'
+  })
+  setImmediate(() => autoUpdater.quitAndInstall())
 })
 
 app.on('ready', () => {
@@ -169,5 +173,3 @@ app.on('activate', () => {
     mainWindow?.focus()
   }
 })
-
-app.allowRendererProcessReuse = true
