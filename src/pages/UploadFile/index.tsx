@@ -4,14 +4,14 @@ import { Container } from '@mui/material'
 
 import MainLayout from '../../components/MainLayout'
 
-const Home: FC = () => {
+const UploadFile: FC = () => {
   return (
     <MainLayout>
       <Container>
-        <h1>Home</h1>
+        <h1>UploadFile</h1>
       </Container>
     </MainLayout>
   )
 }
 
-export default Home
+export default UploadFile

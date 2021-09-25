@@ -120,7 +120,6 @@ export const SessionProvider: FC = ({ children }) => {
       setApiToken(userToken || '')
 
       const { payload } = await me()
-
       setUserData(payload)
 
       setSessionState(SessionState.AUTHENTICATED)

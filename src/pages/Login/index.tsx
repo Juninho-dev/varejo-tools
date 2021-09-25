@@ -13,7 +13,13 @@ import {
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 
+import { useToast } from '../../context/toast'
+import { useSession } from '../../hooks/useSession'
+import { handleError } from '../../utils/errors'
+
 const Login: FC = () => {
+  const { addToast } = useToast()
+  const { login } = useSession()
   const validationSchema = yup.object({
     email: yup
       .string()
@@ -28,8 +34,16 @@ const Login: FC = () => {
       password: ''
     },
     validationSchema,
-    onSubmit: data => {
-      //
+    onSubmit: async data => {
+      try {
+        await login(data.email, data.password)
+      } catch (error) {
+        handleError(
+          error,
+          'Não foi possivel realizar o acesso, por motivos internos',
+          addToast
+        )
+      }
     }
   })
   return (

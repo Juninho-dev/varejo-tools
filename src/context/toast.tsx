@@ -11,7 +11,7 @@ export interface ToastMessage {
   description: string
 }
 
-interface ToastShow {
+export interface ToastShow {
   (message: Omit<ToastMessage, 'id'>): string
 }
 

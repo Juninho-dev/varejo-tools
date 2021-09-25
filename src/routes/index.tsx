@@ -1,14 +1,9 @@
 import React, { FC, useEffect } from 'react'
-import {
-  MemoryRouter as Router,
-  Switch,
-  Route,
-  Redirect
-} from 'react-router-dom'
+import { HashRouter as Router } from 'react-router-dom'
 
 import { useSession, SessionState } from '../hooks/useSession'
-import Home from '../pages/Home'
-import Login from '../pages/Login'
+import AppRoutes from './app.routes'
+import AuthRoutes from './auth.routes'
 
 const Routes: FC = () => {
   const { verifyLogin, sessionState } = useSession()
@@ -19,21 +14,10 @@ const Routes: FC = () => {
     })
   }, [verifyLogin])
 
-  const PrivateRoute = ({ component, ...rest }: any) => {
-    const routeComponent = (props: any) =>
-      SessionState.AUTHENTICATED === sessionState ? (
-        React.createElement(component, props)
-      ) : (
-        <Redirect to={{ pathname: '/' }} />
-      )
-    return <Route {...rest} render={routeComponent} />
-  }
   return (
     <Router>
-      <Switch>
-        <Route path="/" component={Login} />
-        <PrivateRoute path="/home" component={Home} />
-      </Switch>
+      {SessionState.UNAUTHENTICATED === sessionState && <AuthRoutes />}
+      {SessionState.AUTHENTICATED === sessionState && <AppRoutes />}
     </Router>
   )
 }
