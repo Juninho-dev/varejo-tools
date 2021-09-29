@@ -8,7 +8,7 @@ const Home: FC = () => {
   return (
     <MainLayout>
       <Container>
-        <h1>Home</h1>
+        <h1>Bem vindo ao Varejo Tools</h1>
       </Container>
     </MainLayout>
   )

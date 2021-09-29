@@ -14,6 +14,9 @@ module.exports = {
   },
   entry: path.resolve(rootPath, 'src', 'App.tsx'),
   target: 'electron-renderer',
+  externals: {
+    'fsevents': "require('fsevents')"
+  },
   devtool: 'source-map',
   module: {
     rules: [
@@ -43,6 +46,6 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: path.resolve(rootPath, 'index.html')
     }),
-    isDevelopment && new ReactRefreshWebpackPlugin(),
-  ].filter(Boolean),
+    isDevelopment && new ReactRefreshWebpackPlugin()
+  ].filter(Boolean)
 }

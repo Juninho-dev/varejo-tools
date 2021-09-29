@@ -9,7 +9,6 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    color: #E1E1E6;
     background: transparent;
     -webkit-font-smoothing: antialiased;
   }
@@ -81,11 +80,11 @@ export const GlobalStyle = createGlobalStyle`
     border-radius: 4px;
     background: rgba(255, 255, 255, 0.05);
   }
-  
+
   ::-webkit-scrollbar-track {
     border-radius: 4px;
   }
-  
+
   ::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 4px;

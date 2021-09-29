@@ -18,6 +18,10 @@ const schema = {
   token: {
     type: JSONSchemaType.String,
     default: 'null'
+  },
+  rootDirectory: {
+    type: JSONSchemaType.String,
+    default: 'null'
   }
 }
 

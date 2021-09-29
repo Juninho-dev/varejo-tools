@@ -9,18 +9,18 @@ const MenuList = () => {
   const history = useHistory()
   return (
     <List>
-      <Link to="/">
+      <Link to="/" style={{ textDecoration: 'none', color: '#fff' }}>
         <ListItemButton selected={history.location.pathname === '/'}>
           <ListItemIcon>
-            <HomeIcon color="primary" />
+            <HomeIcon sx={{ color: '#fff' }} />
           </ListItemIcon>
           <ListItemText primary="Home" />
         </ListItemButton>
       </Link>
-      <Link to="/upload/file">
+      <Link to="/upload/file" style={{ textDecoration: 'none', color: '#fff' }}>
         <ListItemButton selected={history.location.pathname === '/upload/file'}>
           <ListItemIcon>
-            <ArchiveIcon color="primary" />
+            <ArchiveIcon sx={{ color: '#fff' }} />
           </ListItemIcon>
           <ListItemText primary="XML" />
         </ListItemButton>

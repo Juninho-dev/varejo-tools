@@ -1,3 +1,6 @@
+import FormData from 'form-data'
+import { ReadStream } from 'fs'
+
 import api from './api'
 import IApiResponse from './IApiResponse'
 
@@ -54,6 +57,21 @@ export const signOut = async (): Promise<IApiResponse> => {
 export const me = async (): Promise<IApiResponse<User>> => {
   const { data } = await api.get('auth/me')
 
+  return data
+}
+
+export const deployFile = async (
+  fileData: ReadStream
+): Promise<IApiResponse> => {
+  console.log(fileData)
+
+  const formdata = new FormData()
+  formdata.append('file', fileData)
+
+  const { data } = await api.post('auth/upload/file', formdata, {
+    headers: formdata.getHeaders()
+  })
+  console.log(data)
   return data
 }
 

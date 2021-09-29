@@ -23,6 +23,7 @@ import {
   refreshToken
 } from '../services/UserService'
 import { config } from '../store/config'
+import { setWatcherDirectory } from '../utils/fileWatcher'
 
 export enum SessionState {
   UNAUTHENTICATED,
@@ -60,6 +61,7 @@ export const SessionProvider: FC = ({ children }) => {
     SessionState.UNAUTHENTICATED
   )
   const token = useRef('')
+  const rootDirectory = useRef('')
 
   const mergeToken = useCallback(async (newToken: string) => {
     token.current = newToken
@@ -112,6 +114,16 @@ export const SessionProvider: FC = ({ children }) => {
     setUserData(null)
   }, [mergeToken])
 
+  const verifyRootDirectory = useCallback(async () => {
+    if (rootDirectory.current) return
+
+    rootDirectory.current = await config.get('rootDirectory')
+
+    if (rootDirectory.current) {
+      setWatcherDirectory(rootDirectory.current)
+    }
+  }, [])
+
   const verifyLogin = useCallback(async () => {
     setSessionState(SessionState.AUTHENTICATING)
     try {
@@ -121,13 +133,14 @@ export const SessionProvider: FC = ({ children }) => {
 
       const { payload } = await me()
       setUserData(payload)
+      verifyRootDirectory()
 
       setSessionState(SessionState.AUTHENTICATED)
     } catch (e) {
       setSessionState(SessionState.UNAUTHENTICATED)
       throw e
     }
-  }, [getToken])
+  }, [getToken, verifyRootDirectory])
 
   const reloadUser = useCallback(async () => {
     const { payload } = await me()
@@ -140,7 +153,7 @@ export const SessionProvider: FC = ({ children }) => {
   useEffect(() => {
     let requestQueue: IRequestQueue[] = []
     let isRefreshing = false
-
+    console.log('aqui')
     const interceptor = api.interceptors.response.use(
       response => response,
       (error: AxiosError<IApiResponse>) => {
