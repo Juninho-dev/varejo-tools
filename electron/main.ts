@@ -149,7 +149,10 @@ autoUpdater.on('update-downloaded', () => {
     message:
       'Atualizações baixadas, o aplicativo será encerrado para atualização ...'
   })
-  setImmediate(() => autoUpdater.quitAndInstall())
+  setImmediate(() => {
+    autoUpdater.quitAndInstall()
+    setTimeout(() => mainWindow?.destroy(), 4000)
+  })
 })
 
 app.on('ready', () => {

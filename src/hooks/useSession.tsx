@@ -127,12 +127,12 @@ export const SessionProvider: FC = ({ children }) => {
   const verifyLogin = useCallback(async () => {
     setSessionState(SessionState.AUTHENTICATING)
     try {
-      const userToken = await getToken()
+      // const userToken = await getToken()
 
-      setApiToken(userToken || '')
+      // setApiToken(userToken || '')
 
-      const { payload } = await me()
-      setUserData(payload)
+      // const { payload } = await me()
+      // setUserData(payload)
       verifyRootDirectory()
 
       setSessionState(SessionState.AUTHENTICATED)
@@ -153,7 +153,6 @@ export const SessionProvider: FC = ({ children }) => {
   useEffect(() => {
     let requestQueue: IRequestQueue[] = []
     let isRefreshing = false
-    console.log('aqui')
     const interceptor = api.interceptors.response.use(
       response => response,
       (error: AxiosError<IApiResponse>) => {
@@ -226,7 +225,7 @@ export const useSession = (): ISessionContext => {
   const context = useContext(SessionContext)
 
   if (!context) {
-    throw new Error('this hook must be used with SessionContext Provider')
+    throw new Error('Este gancho deve ser usado com o Provedor SessionContext')
   }
 
   return context

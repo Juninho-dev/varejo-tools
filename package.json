@@ -158,11 +158,14 @@
     "win": {
       "target": [
         "portable"
-      ]
+      ],
+      "icon": "build/icon.png",
+      "certificateFile": "/Users/junielfilappi/distribution.p12"
     },
     "mac": {
       "category": "public.app-category.utilities",
       "hardenedRuntime": true,
+      "icon": "build/icon.png",
       "entitlements": "build/entitlements.mac.plist",
       "entitlementsInherit": "build/entitlements.mac.plist",
       "target": [
